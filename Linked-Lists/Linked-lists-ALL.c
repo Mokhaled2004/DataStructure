@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
 class LinkedList {
@@ -201,6 +202,29 @@ public:
 
     }
 
+
+    void RemoveAllOccElement(int element) {  //Remove all occurence
+        while (InList(element)) {
+            RemoveElement(element);
+        }
+    }
+
+    bool InList(int element) {  //check if element is in the list
+
+        Node *current = Head;
+        while (current != NULL) {
+            if (current -> item == element) {
+                return  true;
+            }
+
+            current = current -> next;
+
+        }
+        return false;
+    }
+
+
+
     void RemoveAtPosition(int pos){
 
         if (pos <0 || pos > length){
@@ -322,7 +346,13 @@ int main() {
     List.InsertFirst(70);
     List.Print(); // 70 90 60 40 10
     cout << List.Search(40);
+    cout<<endl;
+    List.InsertFirst(2);
+    List.InsertFirst(2);
+    List.Print();
+    List.RemoveAllOccElement(2);
+    List.Print();  //70 90 60 40 10
+
 
     return 0;
 }
-
