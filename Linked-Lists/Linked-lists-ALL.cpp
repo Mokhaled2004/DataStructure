@@ -308,6 +308,64 @@ public:
         return -1;
     }
 
+
+    void moveTailToFront () {
+        if (length == 0 || length == 1) {
+            return;
+        }
+
+        else {
+
+            Node *current = Head;
+
+
+            while (current -> next  != Tail) {
+                current = current -> next;
+            }
+
+            Tail -> next = Head;
+            Head = Tail;
+            Tail = current;
+            Tail -> next = nullptr;
+        }
+    }
+
+
+    void deleteMin()
+    {
+        if (Head == nullptr) {
+            cout << "List is empty\n";
+            return;
+        }
+
+        Node* current = Head;
+        Node* min = Head;
+        Node* prev = nullptr;
+
+        while (current->next != nullptr)
+        {
+            if (current->next-> item< min->item)
+            {
+                min = current->next;
+                prev = current;
+            }
+            current = current->next;
+        }
+
+        if (min == Head) {
+            Head = Head->next;
+        } else {
+            prev->next = min->next;
+        }
+
+        delete min;
+    }
+
+
+
+    
+
+
     void Print(){
 
         Node *current = Head;
