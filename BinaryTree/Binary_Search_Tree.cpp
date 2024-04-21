@@ -184,10 +184,31 @@ public:
             }
         }
     }
+
+
+    int getLevel(Node *node , int element , int level) {
+
+        if (node == nullptr) {
+            return 0;
+        }
+
+        if (node -> item == element) {
+            return level;
+        }
+
+        int down = getLevel(node -> left , element,level +1);
+        if (down != 0) {
+            return down;
+        }
+
+        down = getLevel(node -> right , element , level + 1);
+        return down;
+
+    }
+
 };
 
 int main() {
 
     return 0;
 }
-
