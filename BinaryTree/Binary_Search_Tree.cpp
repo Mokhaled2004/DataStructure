@@ -142,11 +142,11 @@ public:
         Node *prev;
         Node *newNode;
         newNode = new Node;
-        assert (newNode != nullptr) {
+        assert (newNode != nullptr) ;
             newNode -> item = element;
             newNode -> left = nullptr;
             newNode -> right = nullptr;
-        }
+
 
         if (root == nullptr) {
             root = newNode;
@@ -206,9 +206,187 @@ public:
 
     }
 
+
+    void inOrderCall() {
+        inorder(root);
+        cout << endl;
+    }
+
+    void preOrderCall() {
+        preorder(root);
+        cout << endl;
+    }
+
+    void postOrderCall() {
+        postorder(root);
+        cout << endl;
+    }
+
+
+    void remove(int element) {
+
+        Node *current;
+        Node *prev;
+
+        if (root == nullptr) {
+            cout <<"Cannot delete from an empty tree\n";
+            return;
+        }
+
+        if (root -> item == element) {
+            DeleteFromTree(root);
+            return;
+        }
+
+        prev = root;
+
+        if (root -> item > element) {
+            current = root -> left;
+        }
+        else {
+            current = root -> right;
+        }
+
+        while (current != nullptr) {
+
+            if (current -> item == element) {
+                break;
+            }
+
+            else {
+                prev = current;
+
+                if (current -> item > element) {
+                    current = current -> left;
+                }
+                else {
+                    current = current -> right;
+                }
+            }
+
+            if (current == nullptr) {
+                cout << "item to be deleted is not in the tree\n";
+            }
+
+            else if (prev -> item > element) {
+                DeleteFromTree(prev -> left);
+            }
+            else {
+                DeleteFromTree(prev -> right);
+            }
+        }
+    }
+
+
+
+    void DeleteFromTree (Node* &p) {
+
+        Node *current;
+        Node *prev;
+        Node *tmp;
+
+
+        if (p -> left == nullptr && p -> right == nullptr) {
+            delete p;
+            p = nullptr;
+        }
+
+        else if (p -> left == nullptr) {
+            tmp = p;
+            p = p-> right;
+            delete tmp;
+        }
+
+        else if (p -> right == nullptr) {
+            tmp = p;
+            p  = p -> left;
+            delete tmp;
+        }
+
+        else {
+
+            current = p-> left;
+            prev = nullptr;
+
+            while (current -> right != nullptr) {
+                prev = current;
+                current = current -> right;
+            }
+
+            p -> item = current -> item;
+
+            if (prev == nullptr) {
+                p -> left = current -> left;
+            }
+
+            else {
+                prev -> right = current -> right;
+            }
+
+            delete current ;
+
+        }
+    }
+
+
+
+   void  deleteByCopying (Node* &p) {
+        Node *prev , *tmp;
+
+        if ( p -> right == nullptr) {
+            p = p -> left;
+        }
+        else if (p -> left == nullptr) {
+            p = p -> right;
+        }
+        else {
+
+            tmp = p -> left;
+            prev = p;
+
+            while (tmp -> right != 0) {
+                prev = tmp;
+                tmp = tmp -> right;
+            }
+
+            p -> item = tmp -> item;
+            if (prev == p) {
+                prev -> left = tmp -> left;
+            }
+            else {
+                prev -> right = tmp -> left;
+            }
+
+            delete tmp;
+
+        }
+    }
+
+
 };
 
 int main() {
+    BinarySearchTree b;
+    b.insert(9);
+    b.insert(4);
+    b.insert(1);
+    b.insert(5);
+    b.insert(10);
+    b.insert(11);
+
+
+    b.inOrderCall();
+    b.preOrderCall();
+    b.postOrderCall();
+
+    if(b.Search(10)) {
+        cout << "Found it\n";
+    }
+
+    b.remove(4);
+    b.inOrderCall();
+
+
 
     return 0;
 }
