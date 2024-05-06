@@ -6,7 +6,7 @@ using namespace std;
 // delete                   288     // getBalance                  394
 // search                   269     // checktreefull               423
 // getMin                   136     // findsibling                 440
-// getMax                   150
+// getMax                   150     // findparent                  483
 // getSum                   173
 // getLevel                 208
 // getNumberOfNodes         228
@@ -570,7 +570,7 @@ int main() {
     cout << "Is the tree full :" <<tree.checktreefull()<<endl;                            // 0 (False)
     cout << "Is the tree perfect :" <<tree.checktreeperfect()<<endl;                      // 0 (False)
     tree.findsibling(4);                                                                  // 1
-    tree.findparent(15);                                                                   // 10
+    tree.findparent(18);                                                                   // 10
 
 
     
