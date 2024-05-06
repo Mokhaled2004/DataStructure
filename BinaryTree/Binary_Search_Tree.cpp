@@ -437,7 +437,7 @@ class BST{    //BSt class
         return checktreeperfect(root, 0, getheight(root));
     }
 
-    void findsibling(int element) {
+    void findsibling(int element) {             // find the sibling of a node
 
         Node *current = root;
         Node *prev = nullptr;
@@ -480,7 +480,7 @@ class BST{    //BSt class
         }
     }
 
-    void findparent(int element) {
+    void findparent(int element) {           // find the parent of a node
 
         Node *current = root;
         Node *prev = nullptr;
@@ -571,7 +571,7 @@ int main() {
     cout << "Is the tree perfect :" <<tree.checktreeperfect()<<endl;                      // 0 (False)
     tree.findsibling(4);                                                                  // 1
     tree.findparent(18);                                                                   // 10
-    
+
 
     
     
