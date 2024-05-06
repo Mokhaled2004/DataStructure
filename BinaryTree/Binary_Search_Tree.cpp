@@ -1,392 +1,419 @@
 #include <iostream>
-#include <cassert>
-using namespace std;
+#include <math.h>
+using namespace std;    
 
-struct Node{
+// insert                   47
+// delete                   288
+// search                   269
+// getMin                   136
+// getMax                   150
+// getSum                   173
+// getLevel                 208
+// getNumberOfNodes         228
+// getNumberOfLeafNodes     241
+// getHeight                256
+// getSumFromRootTillNode   183
+// displayInorder           95
+// displayPreorder          104
+// displayPostorder         113
 
+struct Node {   //Node struct 
     int item;
-    Node *left;
-    Node *right;
-
-};
-
-class BinarySearchTree{
-
-
-private:
-
-    Node *root;
-
-public:
-
-
-
-    BinarySearchTree() {
-        root = nullptr;
+    Node* left;
+    Node* right;
+    Node(int val) {    // Node constructor
+        item = val;
+        left = NULL;
+        right = NULL;
     }
+};  
 
 
-
-    void inorder(Node *p){
-
-        if (p != nullptr) {
-
-            inorder(p -> left);
-            cout << p->item << " ";
-            inorder(p -> right);
-
-        }
-    }
+class BST{    //BSt class
 
 
-    void preorder(Node *p) {
+    private:
 
-        if (p != nullptr) {
+        Node* root; 
 
-            cout << p ->item << " ";
-            preorder(p -> left);
-            preorder(p -> right);
+    public:
+
+        BST() {    // BST constructor
+
+            root = nullptr;
 
         }
-    }
 
-
-    void postorder(Node *p) {
-
-        if (p != nullptr) {
-
-            postorder(p -> left);
-            postorder(p -> right);
-            cout << p -> item << " ";
-
-        }
-    }
-
-
-    int nodeCount(Node *p) {
-
-        if (p == nullptr) {
-            return 0;
-        }
-        else {
-            return 1 + nodeCount(p -> left) + nodeCount(p -> right);
-        }
-    }
-
-
-    int leavesCount(Node *p) {
-
-        if ( p == nullptr) {
-            return 0;
-        }
-
-        else if (( p -> left == nullptr) && ( p -> right == nullptr)) {
-            return 1;
-        }
-
-        else {
-            return leavesCount(p -> left) + leavesCount( p -> right);
-        }
-    }
-
-
-    bool Search(int element) {
-
-        Node *current = root;
-
-        while (current != nullptr) {
-
-            if (current -> item == element) {
-                return true;
-            }
-
-            else if (current -> item > element) {
-                current = current -> left;
-            }
-
-            else {
-                current = current -> right;
-            }
-        }
-        return false;
-    }
-
-    int max(int x, int y){
-
-        if (x >= y) {
-            return x;
-        }
-        else {
-            return y;
-        }
-
-    }
-
-
-
-
-    int height(Node *p) {
-
-        if ( p == nullptr) {
-            return 0;
-        }
-
-        else {
-            return 1 + max(height(p -> left), height(p -> right));
-        }
-    }
-
-    void insert (int element) {
-
-        Node *current;
-        Node *prev;
-        Node *newNode;
-        newNode = new Node;
-        assert (newNode != nullptr) ;
-            newNode -> item = element;
+        void insert(int element) {     //insert function
+            
+            Node *current;
+            Node *prev;
+            Node *newNode;
+            newNode = new Node(element); 
             newNode -> left = nullptr;
             newNode -> right = nullptr;
+           
 
+            if (root == nullptr) {     // if the tree is empty the root will be the new node
+                root = newNode;
+            }
 
-        if (root == nullptr) {
-            root = newNode;
-        }
-        else {
+            else {             // if the tree is not empty then we will traverse the tree to find the correct position for the new node
+                current = root;
+                while (current != nullptr) {
 
-            current = root;
+                    prev = current;
+                    
+                    if (current -> item == element) {      // if the element already exists in the tree
+                        cout << "Eelement already exists in the tree" << endl; 
+                        return;
+                    }
 
-            while (current != nullptr) {
+                    else {     // if the element does not exist in the tree then we will traverse the tree to find the correct position for the new node
 
-                prev = current;
-
-                if (current -> item == element) {
-                    cout << "duplicates not allowed\n";
-                    return;
-                }
-
-                else {
-
-                    if (current -> item > element) {
+                        if (current -> item > element) {
                         current = current -> left;
-                    }
-                    else {
+                        }
+                        else {
                         current = current -> right;
-                    }
+                        }
 
+                    }
+                }
+
+                if (prev -> item > element) {   // if the element is less than the parent node then the new node will be the left child of the parent node
+                    prev -> left = newNode;
+                }
+                else {
+                    prev -> right = newNode;
+                
                 }
             }
+        }    
 
-            if (prev -> item > element) {
-                prev -> left = newNode;
-            }
-            else {
-                prev -> right = newNode;
-            }
+
+    void inorder(Node* root) {    // inorder traversal
+        if (root == nullptr) {
+            return;
         }
+        inorder(root -> left);
+        cout << root -> item << " ";
+        inorder(root -> right);
+    }
+
+    void preorder(Node* root) {     // preorder traversal
+        if (root == nullptr) {
+            return;
+        }
+        cout << root -> item << " ";
+        preorder(root -> left);
+        preorder(root -> right);
+    }
+
+    void postorder(Node* root) {     // postorder traversal
+        if (root == nullptr) {
+            return;
+        }
+        postorder(root -> left);
+        postorder(root -> right);
+        cout << root -> item << " ";
     }
 
 
-    int getLevel(Node *node , int element , int level) {
+    void display_inorder() {     // display inorder traversal
+        inorder(root);
+    }
+
+    void display_preorder() {      // display preorder traversal
+        preorder(root);
+    }
+
+    void display_postorder() {      // display postorder traversal
+        postorder(root);
+    }
+
+
+    int getmin(Node *root) {        // get the minimum element in the tree
+        if (root == nullptr) {
+            cout << "Tree is empty" << endl;
+            return -1;
+        }
+        else {
+            Node *current = root;
+            while (current -> left != nullptr) {
+                current = current -> left;
+            }
+            return current -> item;
+        }
+    }
+
+    int getmax(Node *root) {        // get the maximum element in the tree
+        if (root == nullptr) {
+            cout << "Tree is empty" << endl;
+            return -1;
+        }
+        else {
+            Node *current = root;
+            while (current -> right != nullptr) {
+                current = current -> right;
+            }
+            return current -> item;
+        }
+    }
+
+    int getMin() {        // get the minimum element in the tree
+        return getmin(root);
+    }
+ 
+    int getMax() {          // get the maximum element in the tree
+        return getmax(root);
+    }
+
+
+    int getsum(Node *node) {  // get the sum of a node from the node till the node
 
         if (node == nullptr) {
             return 0;
         }
-
-        if (node -> item == element) {
-            return level;
-        }
-
-        int down = getLevel(node -> left , element,level +1);
-        if (down != 0) {
-            return down;
-        }
-
-        down = getLevel(node -> right , element , level + 1);
-        return down;
+        return node -> item + getsum(node -> left) + getsum(node -> right);
 
     }
 
 
-    void inOrderCall() {
-        inorder(root);
-        cout << endl;
-    }
-
-    void preOrderCall() {
-        preorder(root);
-        cout << endl;
-    }
-
-    void postOrderCall() {
-        postorder(root);
-        cout << endl;
-    }
-
-
-    void remove(int element) {
-
-        Node *current;
-        Node *prev;
-
-        if (root == nullptr) {
-            cout <<"Cannot delete from an empty tree\n";
-            return;
-        }
-
-        if (root -> item == element) {
-            DeleteFromTree(root);
-            return;
-        }
-
-        prev = root;
-
-        if (root -> item > element) {
-            current = root -> left;
-        }
-        else {
-            current = root -> right;
-        }
-
+    int getsumfromroottillnode(int val) {    // get the sum of all the nodes from the root to the node with the value val
+        Node *current = root;
+        int sum = 0;
         while (current != nullptr) {
+            if (current -> item == val) {
+                sum += current -> item;
+                break;
+            }
+            else if (current -> item > val) {
+                sum += current -> item;
+                current = current -> left;
+            }
+            else {
+                sum += current -> item;
+                current = current -> right;
+            }
+        }
+        return sum;
+    }
 
+
+    int getSum() {    // get the sum of all the nodes in the tree
+        return getsum(root);
+    }
+
+    int getLevel(int element) {
+        Node *current = root;
+        int level = 0;
+        while (current != nullptr) {
+            if (current -> item == element) {
+                return level;
+            }
+            else if (current -> item > element) {
+                current = current -> left;
+                level++;
+            }
+            else {
+                current = current -> right;
+                level++;
+            }
+        }
+        return level;
+    }
+
+
+    int getNumberOfNodes(Node *root) {       // get the number of nodes in the tree
+        if (root == nullptr) {
+            return 0;
+        }
+        return 1 + getNumberOfNodes(root -> left) + getNumberOfNodes(root -> right);
+    }
+
+    int getNumberOfNodesintree() {        // get the number of nodes in the tree
+        return getNumberOfNodes(root);
+    }
+
+
+
+    int getNumberOfLeafNodes(Node *root) {    // get the number of leaf nodes in the tree
+        if (root == nullptr) {
+            return 0;
+        }
+        if (root -> left == nullptr && root -> right == nullptr) {
+            return 1;
+        }
+        return getNumberOfLeafNodes(root -> left) + getNumberOfLeafNodes(root -> right);
+    }
+
+    int getNumberOfLeafNodesintree() {    // get the number of leaf nodes in the tree
+        return getNumberOfLeafNodes(root);
+    }
+
+
+    int getheight(Node *root) {    // get the height of the tree
+        if (root == nullptr) {
+            return 0;
+        }
+        int height =  max(getheight(root -> left), getheight(root -> right));
+        return height + 1;
+    }
+
+
+    int getHeight() {    // get the height of the tree
+        return getheight(root)-1;
+    }
+
+    bool search(int element) {     // search for an element in the tree
+
+        Node *current = root;
+        while (current != nullptr) {
+            if (current -> item == element) {
+                return true;
+            }
+            else if (current -> item > element) {
+                current = current -> left;
+            }
+            else {
+                current = current -> right;
+            }
+        }
+
+        return false;
+    }
+
+
+    void deleteNode(int element) {        // delete a node from the tree
+
+        Node *current = root;
+        Node *prev = nullptr;
+        while (current != nullptr) {          // traverse the tree to find the node to be deleted
             if (current -> item == element) {
                 break;
             }
-
-            else {
+            else if (current -> item > element) {
                 prev = current;
-
-                if (current -> item > element) {
-                    current = current -> left;
-                }
-                else {
-                    current = current -> right;
-                }
-            }
-
-            if (current == nullptr) {
-                cout << "item to be deleted is not in the tree\n";
-            }
-
-            else if (prev -> item > element) {
-                DeleteFromTree(prev -> left);
+                current = current -> left;
             }
             else {
-                DeleteFromTree(prev -> right);
-            }
-        }
-    }
-
-
-
-    void DeleteFromTree (Node* &p) {
-
-        Node *current;
-        Node *prev;
-        Node *tmp;
-
-
-        if (p -> left == nullptr && p -> right == nullptr) {
-            delete p;
-            p = nullptr;
-        }
-
-        else if (p -> left == nullptr) {
-            tmp = p;
-            p = p-> right;
-            delete tmp;
-        }
-
-        else if (p -> right == nullptr) {
-            tmp = p;
-            p  = p -> left;
-            delete tmp;
-        }
-
-        else {
-
-            current = p-> left;
-            prev = nullptr;
-
-            while (current -> right != nullptr) {
                 prev = current;
                 current = current -> right;
             }
-
-            p -> item = current -> item;
-
-            if (prev == nullptr) {
-                p -> left = current -> left;
-            }
-
-            else {
-                prev -> right = current -> right;
-            }
-
-            delete current ;
-
         }
-    }
 
-
-
-   void  deleteByCopying (Node* &p) {
-        Node *prev , *tmp;
-
-        if ( p -> right == nullptr) {
-            p = p -> left;
+        if (current == nullptr) {           // if the element is not found in the tree
+            cout << "Element not found in the tree" << endl;
+            return;
         }
-        else if (p -> left == nullptr) {
-            p = p -> right;
-        }
-        else {
 
-            tmp = p -> left;
-            prev = p;
+        if (current -> left == nullptr && current -> right == nullptr) {         // if the node to be deleted is a leaf node
 
-            while (tmp -> right != 0) {
-                prev = tmp;
-                tmp = tmp -> right;
-            }
-
-            p -> item = tmp -> item;
-            if (prev == p) {
-                prev -> left = tmp -> left;
+            if (prev -> left == current) {
+                prev -> left = nullptr;
             }
             else {
-                prev -> right = tmp -> left;
+                prev -> right = nullptr;
+            }
+
+            delete current;
+
+        }
+
+        else if (current -> left == nullptr || current -> right == nullptr) {            // if the node to be deleted has only one child
+
+            if (current -> left == nullptr) {
+                if (prev -> left == current) {
+                    prev -> left = current -> right;
+                }
+                else {
+                    prev -> right = current -> right;
+                }
+            }
+            else {
+                if (prev -> left == current) {
+                    prev -> left = current -> left;
+                }
+                else {
+                    prev -> right = current -> left;
+                }
+            }
+
+            delete current;
+
+        }
+
+        else {                                             // if the node to be deleted has two children
+
+            Node *tmp = current -> right;
+            Node *tmpprev = nullptr;
+            while (tmp -> left != nullptr) {
+                tmpprev = tmp;
+                tmp = tmp -> left;
+            }
+
+            current -> item = tmp -> item;
+
+            if (tmpprev == nullptr) {
+                current -> right = tmp -> right;
+            }
+            else {
+                tmpprev -> left = tmp -> right;
             }
 
             delete tmp;
 
         }
+
     }
-
-
 };
 
+
 int main() {
-    BinarySearchTree b;
-    b.insert(9);
-    b.insert(4);
-    b.insert(1);
-    b.insert(5);
-    b.insert(10);
-    b.insert(11);
+    BST tree;
+    tree.insert(10);
+    tree.insert(5);
+    tree.insert(15);
+    tree.insert(3);
+    tree.insert(7);
+    tree.insert(12);
+    tree.insert(18);
+    tree.insert(1);
+    tree.insert(4);
 
 
-    b.inOrderCall();
-    b.preOrderCall();
-    b.postOrderCall();
+    //                   10
+    //                  /  \
+    //                 5    15
+    //                / \   / \
+    //               3   7 12  18
+    //              / \
+    //             1   4
 
-    if(b.Search(10)) {
-        cout << "Found it\n";
-    }
-
-    b.remove(4);
-    b.inOrderCall();
-
-
-
+    cout << "Inorder: " << endl;
+    tree.display_inorder();                                                             // 1 3 4 5 7 10 12 15 18
+    cout << endl;
+     cout << "Preorder: " << endl;                                                      // 10 5 3 1 4 7 15 12 18
+    tree.display_preorder();
+    cout << endl;
+     cout << "Postorder: " << endl;                                                     // 1 4 3 7 5 12 18 15 10
+    tree.display_postorder();
+    cout << endl;
+    cout << "Max :" <<tree.getMax()<<endl;                                              // 18
+    cout << "Min :" <<tree.getMin()<<endl;                                              // 1
+    cout << "Sum :" <<tree.getSum()<<endl;                                              // 75
+    cout << "Sum from root to 7 :" <<tree.getsumfromroottillnode(7)<<endl;              // 22
+    cout << "Level of 7 :" <<tree.getLevel(7)<<endl;                                    // 2
+    cout << "Number of nodes in the tree :" <<tree.getNumberOfNodesintree()<<endl;      // 9
+    cout << "Number of leaf nodes in the tree :" <<tree.getNumberOfLeafNodesintree()<<endl;   // 5
+    cout << "Height of the tree :" <<tree.getHeight()<<endl;                                  // 3
+    cout << "Search for 7 :" <<tree.search(7)<<endl;                                          // 1 (True)
+    cout << "Search for 8 :" <<tree.search(8)<<endl;                                          // 0 (False)
+    tree.deleteNode(15);                                                             
+    cout << "Inorder: " << endl;                           
+    tree.display_inorder();                                                             // 1 3 4 5 7 10 12 18
+    cout << endl;
+    
     return 0;
 }
