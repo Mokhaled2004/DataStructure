@@ -2,10 +2,10 @@
 #include <math.h>
 using namespace std;    
 
-// insert                   47
-// delete                   288
-// search                   269
-// getMin                   136
+// insert                   47      // count nodes with one child  372
+// delete                   288     // getBalance                  394
+// search                   269     // checktreefull               423
+// getMin                   136     // findsibling                 440
 // getMax                   150
 // getSum                   173
 // getLevel                 208
@@ -367,6 +367,155 @@ class BST{    //BSt class
         }
 
     }
+
+ 
+    int countNodesWithOneChild(Node* root) {      // count the number of nodes with one child
+        if (root == nullptr) {
+            return 0;
+        }
+
+        int count = 0;
+
+        if ((root->left != nullptr && root->right == nullptr) || (root->left == nullptr && root->right != nullptr)) {
+            count++;
+        }
+
+        count += countNodesWithOneChild(root->left);
+        count += countNodesWithOneChild(root->right);
+
+        return count;
+    }
+
+    int countNodesWithOneChild() {
+        return countNodesWithOneChild(root);
+    }
+
+
+    int getBalance(Node* root) {    // get the balance of the tree
+        if (root == nullptr) {
+            return 0;
+        }
+        return getheight(root -> left) - getheight(root -> right);
+    }
+
+    int getBalance() {    // get the balance of the tree
+        return getBalance(root);
+    }
+
+    bool checktreefull(Node* root) {    // check if the tree is full
+        if (root == nullptr) {
+            return true;
+        }
+        if (root -> left == nullptr && root -> right == nullptr) {
+            return true;
+        }
+        if (root -> left != nullptr && root -> right != nullptr) {
+            return checktreefull(root -> left) && checktreefull(root -> right);
+        }
+        return false;
+    }
+
+    bool checktreefull() {    // check if the tree is full
+        return checktreefull(root);
+    }
+
+
+    bool checktreeperfect(Node* root, int level, int height) {    // check if the tree is perfect
+        if (root == nullptr) {
+            return true;
+        }
+        if (root -> left == nullptr && root -> right == nullptr) {
+            return level == height;
+        }
+        if (root -> left == nullptr || root -> right == nullptr) {
+            return false;
+        }
+        return checktreeperfect(root -> left, level + 1, height) && checktreeperfect(root -> right, level + 1, height);
+    }
+
+    bool checktreeperfect() {    // check if the tree is perfect
+        return checktreeperfect(root, 0, getheight(root));
+    }
+
+    void findsibling(int element) {
+
+        Node *current = root;
+        Node *prev = nullptr;
+        while (current != nullptr) {
+            if (current -> item == element) {
+                break;
+            }
+            else if (current -> item > element) {
+                prev = current;
+                current = current -> left;
+            }
+            else {
+                prev = current;
+                current = current -> right;
+            }
+        }
+
+        if (current == nullptr) {
+            cout << "Element not found in the tree\n";
+        }
+
+        if (prev == nullptr) {
+            cout << "Root has no sibling\n";
+        }
+
+        if (prev -> left == current) {
+            if (prev -> right == nullptr) {
+                cout <<  "No sibling\n";
+            }
+            cout << "Sibling : " << prev -> right -> item << endl;
+        }
+        
+        if (prev -> right == current) {
+            if (prev -> left == nullptr) {
+                cout << "No sibling\n";
+            }
+            else {
+                cout << "Sibling : " << prev -> left -> item << endl;
+            }
+        }
+    }
+
+    void findparent(int element) {
+
+        Node *current = root;
+        Node *prev = nullptr;
+        while (current != nullptr) {
+
+            if (current -> item == element) {
+                break;
+            }
+            else if (current -> item > element) {
+                prev = current;
+                current = current -> left;
+            }
+            else {
+                prev = current;
+                current = current -> right;
+            }
+        }
+
+        if (current == nullptr) {
+            cout << "Element not found in the tree\n";
+        }
+
+        if (prev == nullptr) {
+            cout << "Root has no parent\n";
+        }
+
+        else {
+
+            cout << "Parent : " << prev -> item<<endl;;
+
+        }
+    }
+
+
+
 };
 
 
@@ -381,6 +530,7 @@ int main() {
     tree.insert(18);
     tree.insert(1);
     tree.insert(4);
+    tree.insert(2);
 
 
     //                   10
@@ -410,10 +560,21 @@ int main() {
     cout << "Height of the tree :" <<tree.getHeight()<<endl;                                  // 3
     cout << "Search for 7 :" <<tree.search(7)<<endl;                                          // 1 (True)
     cout << "Search for 8 :" <<tree.search(8)<<endl;                                          // 0 (False)
-    tree.deleteNode(15);                                                             
+    tree.deleteNode(7);  
+    tree.deleteNode(12);                                                           
     cout << "Inorder: " << endl;                           
-    tree.display_inorder();                                                             // 1 3 4 5 7 10 12 18
+    tree.display_inorder();                                                             // 1 3 4 5 7 10 18
     cout << endl;
+    cout << "Number of nodes with one child :" <<tree.countNodesWithOneChild()<<endl;    // 2
+    cout << "Balance of the tree :" <<tree.getBalance()<<endl;                            // 1
+    cout << "Is the tree full :" <<tree.checktreefull()<<endl;                            // 0 (False)
+    cout << "Is the tree perfect :" <<tree.checktreeperfect()<<endl;                      // 0 (False)
+    tree.findsibling(4);                                                                  // 1
+    tree.findparent(18);                                                                   // 10
+    
+
+    
+    
     
     return 0;
 }
