@@ -570,7 +570,7 @@ int main() {
     cout << "Is the tree full :" <<tree.checktreefull()<<endl;                            // 0 (False)
     cout << "Is the tree perfect :" <<tree.checktreeperfect()<<endl;                      // 0 (False)
     tree.findsibling(4);                                                                  // 1
-    tree.findparent(18);                                                                   // 10
+    tree.findparent(15);                                                                   // 10
 
 
     
